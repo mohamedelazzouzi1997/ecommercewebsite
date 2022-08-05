@@ -34,11 +34,15 @@ class cartController extends Controller
         return \redirect()->back()->with(['success' => 'le produit a été supprimé']);
     }
 
-            public function updateQtyProductCart(Request $request,$id){
+        public function updateQtyProductCart(Request $request,$id){
+            if($request->qty < 1){
+                return \redirect()->back()->with(['success' => 'la quantité et invalide']);
+            }else{
 
-            $cart = Cart::find($id);
-            $cart->qty = $request->qty;
-            $cart->update();
+                $cart = Cart::find($id);
+                $cart->qty = $request->qty;
+                $cart->update();
+            }
 
         return \redirect()->back()->with(['success' => 'la quantité de produit a été modfier']);
     }

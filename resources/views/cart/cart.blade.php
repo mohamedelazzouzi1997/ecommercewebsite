@@ -63,7 +63,7 @@ HajarFleur
                                         <form action="{{ route('update.cart',$item->id) }}" method="post">
                                             @method('put')
                                             @csrf
-                                            <input type="number" name="qty" value="{{ $item->qty }}">
+                                            <input type="number" name="qty" min='1' value="{{ $item->qty }}">
                                             <button type="submit" class="btn btn-link"><i class="fa fa-refresh"></i></button>
                                         </form>
                                     </td>
