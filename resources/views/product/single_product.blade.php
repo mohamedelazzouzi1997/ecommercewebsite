@@ -34,8 +34,14 @@ HajarFleur
 							<form action="index.html">
 								<input type="number" min="1" max="{{ $product->qty }}" placeholder="0">
 							</form>
-							<a href="{{ route('add.cart', $product->id) }}" class="btn btn-cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
-							<p><strong>Categories: </strong>test test</p>
+                            @if ($cart->where('product_id', $product->id)->count())
+                                <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
+
+                            @else
+                                <a href="{{ route('add.cart', $product->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+
+                            @endif
+							<p class="text-danger"><strong class="text-muted">Categories: </strong>{{ $product_category->name }}</p>
 						</div>
 						{{-- <h4>Share:</h4>
 						<ul class="product-share">
@@ -63,36 +69,25 @@ HajarFleur
 				</div>
 			</div>
 			<div class="row">
+                @foreach ( $product_by_same_categorys as $product_by_same_category )
+
 				<div class="col-lg-4 col-md-6 text-center">
 					<div class="single-product-item">
 						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
+							<a href="single-product.html"><img src="{{ asset('img/'.$product_by_same_category->img) }}" alt=""></a>
 						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<h3>{{ $product_by_same_category->name }}</h3>
+						<p class="product-price">{{ $product_by_same_category->price }} DH </p>
+						@if ($cart->where('product_id', $product_by_same_category->id)->count())
+                                <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
+
+                        @else
+                                <a href="{{ route('add.cart', $product_by_same_category->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+
+                        @endif
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
+                @endforeach
 			</div>
 		</div>
 	</div>

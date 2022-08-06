@@ -22,12 +22,15 @@ Route::middleware(['auth'])->get('addProductToCart/{id}','App\Http\Controllers\c
 Route::middleware(['auth'])->get('deleteProductFromCart/{id}','App\Http\Controllers\cartController@deleteProductFromCart')->name('delete.cart');
 Route::middleware(['auth'])->put('updateQtyProductCart/{id}','App\Http\Controllers\cartController@updateQtyProductCart')->name('update.cart');
 Route::middleware(['auth'])->get('checkout','App\Http\Controllers\checkoutController@checkout')->name('checkout');
+Route::middleware(['auth'])->post('Order','App\Http\Controllers\checkoutController@order')->name('order');
 
 
 
 
 Route::get('Categorie/{name}','App\Http\Controllers\productController@getProductByCategory')->name('get.category');
 
+Route::get('ContactUs','App\Http\Controllers\contactController@contact')->name('contact');
+Route::post('SendMsg','App\Http\Controllers\contactController@sendMsg')->name('send.msg');
 
 
 

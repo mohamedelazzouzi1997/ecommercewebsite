@@ -18,10 +18,20 @@ HajarFleur
 @section('content')
 
 	<!-- check out section -->
+
 	<div class="checkout-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8">
+                    @if (Session::has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>{{ Session::get('success') }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    @endif
+
 					<div class="checkout-accordion-wrap">
 						<div class="accordion" id="accordionExample">
 						  <div class="card single-accordion">
@@ -32,20 +42,21 @@ HajarFleur
 						        </button>
 						      </h5>
 						    </div>
-
 						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
 						      <div class="card-body">
 						        <div class="billing-address-form">
-						        	<form action="index.html">
-						        		<p><input type="text" name="name" placeholder="Name"></p>
-						        		<p><input type="text" name="adress" placeholder="Address"></p>
-						        		<p><input type="tel" name="phone" placeholder="Phone"></p>
-                                        <p><select class="form-control form-control-lg">
+						        	<form action="{{ route('order') }}" method="post" enctype="multipart/form">
+						        		@csrf
+                                        <p><input type="text" name="name" placeholder="Name" value="{{ auth()->user()->name }}"></p>
+						        		<p><input type="text" name="adress" placeholder="Address" value="{{ auth()->user()->adress }}"></p>
+						        		<p><input type="tel" name="phone" placeholder="Phone" value="{{ auth()->user()->phone }}"></p>
+                                        <p><select name='city' class="form-control form-control-lg">
                                             <option value="marrakech">Marrakech</option>
                                             <option value="casa">Casa</option>
                                             <option value="tanger">Tanger</option>
                                             <option value="agadir">Agadir</option>
                                         </select></p>
+                                        <button class="btn btn-success btn-block">Order</button>
 						        	</form>
 						        </div>
 						      </div>
@@ -94,7 +105,6 @@ HajarFleur
 								</tr>
 							</tbody>
 						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
 					</div>
 				</div>
 			</div>

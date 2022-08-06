@@ -44,12 +44,16 @@
       <?php
         $url = URL::current();
         $active = explode('/',$url);
+        //  dd(url()->current());
+        // $url = request()->route()->uri;
         $categorys = App\models\Category::all();
         if(auth()->check()){
             $cart_count = App\models\Cart::where('user_id',auth()->user()->id)->get();
         }
 
+
       ?>
+      @yield('php')
 
 	<!--PreLoader-->
     <div class="loader">
@@ -60,29 +64,29 @@
     <!--PreLoader Ends-->
 
 	<!-- header -->
-	<div class="top-header-area" @if ($active[3] != 'home')
-            style="background-color: black"
+	<div class="top-header-area" @if (!isset($nav_color) )
+            style="background-color: #051922;"
     @endif id="sticker">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 col-sm-12 text-center">
 					<div class="main-menu-wrap">
 						<!-- logo -->
-						<div class="site-logo">
-							<a href="{{ url('/') }}">
-								<img width="50" height="50"src="{{ asset('img/logo2.png') }}" alt="{{ asset('img/logo2.png') }}">
-							</a>
-						</div>
 						<!-- logo -->
 
 						<!-- menu start -->
 						<nav class="main-menu">
-							<ul>
-								<li class=""><a href="#">home</a>
-									<ul class="sub-menu">
+                            <div class="site-logo">
+                                <a href="{{ url('/') }}">
+                                    <img width="75" height="75"src="{{ asset('img/logo2.png') }}" alt="{{ asset('img/logo2.png') }}">
+                                </a>
+                            </div>
+                            <ul>
+								<li class=""><a href="{{ route('home') }}">home</a>
+									{{-- <ul class="sub-menu">
 										<li><a href="index.html">Static Home</a></li>
 										<li><a href="index_2.html">Slider Home</a></li>
-									</ul>
+									</ul> --}}
 								</li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="#">Categories</a>
@@ -92,19 +96,17 @@
                                         @endforeach
 									</ul>
 								</li>
-								<li><a href="news.html">News</a>
+								{{-- <li><a href="news.html">News</a>
 									<ul class="sub-menu">
 										<li><a href="news.html">News</a></li>
 										<li><a href="single-news.html">Single News</a></li>
 									</ul>
-								</li>
-								<li><a href="contact.html">Contact</a></li>
+								</li> --}}
+								<li><a href="{{ route('contact') }}">Contact</a></li>
 								<li><a href="shop.html">Shop</a>
 									<ul class="sub-menu">
-										<li><a href="shop.html">Shop</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="single-product.html">Single Product</a></li>
-										<li><a href="#">Cart</a></li>
+										<li><a href="{{ route('show.cart') }}">Cart</a></li>
+										<li><a href="{{ route('checkout') }}">Check Out</a></li>
 									</ul>
 								</li>
                                 @if(auth()->check())
@@ -116,7 +118,7 @@
                                             <span class='cart-count'>{{ $cart_count->count() }}</span>
                                             @endif
                                         </a>
-                                        <a  href="#"><img height="40" width="40" class="rounded-circle img-thumbnail mr-2" src="{{ asset('assets/img/avaters/avatar1.png') }}">{{ auth()->user()->name }}</a>
+                                        <a  href="#"><img height="40" width="40" class="rounded-circle img-thumbnail mr-2" src="https://ui-avatars.com/api/?name={{ auth()->user()->name  }}">{{ auth()->user()->name }}</a>
 										{{-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> --}}
                                         <a onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();"
@@ -143,45 +145,20 @@
 
 							</ul>
 						</nav>
-						{{-- <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						{{-- <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a> --}}
 						<div class="mobile-menu"></div>
-						<!-- menu end --> --}}
+						<!-- menu end -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- end header -->
-
-	<!-- search area -->
-	{{-- <div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> --}}
-	<!-- end search area -->
-
-
-
-
-
 
   @yield('content')
 
 
 	<!-- features list section -->
-	<div class="list-section pt-80 pb-80">
+	{{-- <div class="list-section pt-80 pb-80">
 		<div class="container">
 
 			<div class="row">
@@ -221,10 +198,10 @@
 			</div>
 
 		</div>
-	</div>
+	</div> --}}
 	<!-- end features list section -->
   	<!-- footer -->
-	<div class="footer-area">
+	<div class="footer-area py-5">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-3 col-md-6">
@@ -249,20 +226,18 @@
 						<ul>
 							<li><a href="index.html">Home</a></li>
 							<li><a href="about.html">About</a></li>
-							<li><a href="services.html">Shop</a></li>
-							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="{{ route('contact') }}">Contact</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
+                    <h2 class="widget-title">Social Links</h2>
+					<div class="social-icons">
+						<ul>
+							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -274,21 +249,10 @@
 	<div class="copyright">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.<br>
-						Distributed By - <a href="https://themewagon.com/">Themewagon</a>
+				<div class="col-lg-12 col-md-12 text-center">
+					<p>Copyrights &copy; 2022 All Rights Reserved.<br>
+
 					</p>
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
 				</div>
 			</div>
 		</div>

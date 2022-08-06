@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('user_id');
             $table->string('adress');
+            $table->string('phone');
             $table->string('city');
             $table->timestamps();
         });

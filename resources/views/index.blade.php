@@ -13,7 +13,11 @@ HajarFleur
 
 @endsection
 
-
+@section('php')
+   @php
+       $nav_color = true;
+   @endphp
+@endsection
 
 @section('content')
 	<!-- home page slider -->
