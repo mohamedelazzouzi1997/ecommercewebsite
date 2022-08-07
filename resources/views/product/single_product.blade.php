@@ -27,21 +27,22 @@ HajarFleur
 				</div>
 				<div class="col-md-7">
 					<div class="single-product-content">
-						<h3>{{ $product->name }}</h3>
+						<h3 style='color:#028860'>{{ $product->name }}</h3>
 						<p class="single-product-pricing"><span></span>{{ $product->price }} DH</p>
 						<p>{{ $product->description }}</p>
 						<div class="single-product-form">
 
 							<input id="qty" class="d-block" type="number" min="1" max="{{ $product->qty }}" value="1">
-
-                            @if ($cart->where('product_id', $product->id)->count())
-                                <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
-
+                            @if (auth()->check())
+                                @if ($cart->where('product_id', $product->id)->count())
+                                    <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
+                                @else
+                                    <a id='{{ $product->id }}' onclick="addtocart({{ $product->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+                                @endif
                             @else
-                                <a id='{{ $product->id }}' onclick="addtocart({{ $product->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
-
+                                <a href="{{ route('add.cart', $product->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
                             @endif
-							<p class="text-danger"><strong class="text-muted">Categories: </strong>{{ $product_category->name }}</p>
+                             <p class="text-danger"><strong class="text-muted">Categories: </strong><a href="{{ url('/Categorie'.'/'.$product_category->name) }}">{{ $product_category->name }} <i class="fa-solid fa-link"></i></a></p>
 						</div>
 						{{-- <h4>Share:</h4>
 						<ul class="product-share">
@@ -69,6 +70,7 @@ HajarFleur
 				</div>
 			</div>
 			<div class="row">
+
                 @foreach ( $product_by_same_categorys as $product_by_same_category )
 
 				<div class="col-lg-4 col-md-6 text-center">
@@ -78,13 +80,17 @@ HajarFleur
 						</div>
 						<h3>{{ $product_by_same_category->name }}</h3>
 						<p class="product-price">{{ $product_by_same_category->price }} DH </p>
-						@if ($cart->where('product_id', $product_by_same_category->id)->count())
-                                <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
-
+                        @if (auth()->check())
+                            @if ($cart->where('product_id', $product_by_same_category->id)->count())
+                                    <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
+                            @else
+                                    <a id='{{ $product_by_same_category->id }}' onclick="addtocart({{ $product_by_same_category->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+                            @endif
                         @else
-                                <a id='{{ $product_by_same_category->id }}' onclick="addtocart({{ $product_by_same_category->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
-
+                                <a href="{{ route('add.cart', $product->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
                         @endif
+                        <p ><a class=" font-weight-bold" href="{{ url('/Categorie'.'/'.$product_category->name) }}">{{ $product_category->name }} <i class="fa-solid fa-link"></i></a></p>
+
 					</div>
 				</div>
                 @endforeach

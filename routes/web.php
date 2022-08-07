@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 Route::get('/home','App\Http\Controllers\productController@index' )->name('home');
 Route::middleware(['auth'])->get('Mycart','App\Http\Controllers\cartController@show')->name('show.cart');
-// Route::middleware(['auth'])->get('addProductToCart/{id}','App\Http\Controllers\cartController@addProductToCart')->name('add.cart');
+Route::middleware(['auth'])->get('addProductToCart/{id}','App\Http\Controllers\cartController@addProductToCart')->name('add.cart');
 Route::middleware(['auth'])->get('deleteProductFromCart/{id}','App\Http\Controllers\cartController@deleteProductFromCart')->name('delete.cart');
 Route::middleware(['auth'])->put('updateQtyProductCart/{id}','App\Http\Controllers\cartController@updateQtyProductCart')->name('update.cart');
 Route::middleware(['auth'])->get('checkout','App\Http\Controllers\checkoutController@checkout')->name('checkout');

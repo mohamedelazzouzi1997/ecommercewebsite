@@ -24,6 +24,7 @@ class productController extends Controller
     }
 
     public function show($id){
+        $cart = '';
         if(auth()->check()){
             $cart = Cart::where('user_id',auth()->user()->id)->get();
         }
@@ -37,7 +38,7 @@ class productController extends Controller
     }
 
     public function getProductByCategory($name){
-
+        $cart ='';
         if(auth()->check()){
             $cart = Cart::where('user_id',auth()->user()->id)->get();
         }
