@@ -31,14 +31,14 @@ HajarFleur
 						<p class="single-product-pricing"><span></span>{{ $product->price }} DH</p>
 						<p>{{ $product->description }}</p>
 						<div class="single-product-form">
-							<form action="index.html">
-								<input type="number" min="1" max="{{ $product->qty }}" placeholder="0">
-							</form>
+
+							<input id="qty" class="d-block" type="number" min="1" max="{{ $product->qty }}" value="1">
+
                             @if ($cart->where('product_id', $product->id)->count())
                                 <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
 
                             @else
-                                <a href="{{ route('add.cart', $product->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+                                <a id='{{ $product->id }}' onclick="addtocart({{ $product->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
 
                             @endif
 							<p class="text-danger"><strong class="text-muted">Categories: </strong>{{ $product_category->name }}</p>
@@ -74,7 +74,7 @@ HajarFleur
 				<div class="col-lg-4 col-md-6 text-center">
 					<div class="single-product-item">
 						<div class="product-image">
-							<a href="single-product.html"><img src="{{ asset('img/'.$product_by_same_category->img) }}" alt=""></a>
+							<a href="{{ route('show.product',$product_by_same_category->id) }}"><img src="{{ asset('img/'.$product_by_same_category->img) }}" alt=""></a>
 						</div>
 						<h3>{{ $product_by_same_category->name }}</h3>
 						<p class="product-price">{{ $product_by_same_category->price }} DH </p>
@@ -82,7 +82,7 @@ HajarFleur
                                 <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
 
                         @else
-                                <a href="{{ route('add.cart', $product_by_same_category->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+                                <a id='{{ $product_by_same_category->id }}' onclick="addtocart({{ $product_by_same_category->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
 
                         @endif
 					</div>
@@ -95,5 +95,41 @@ HajarFleur
 @endsection
 
 @section('scripts')
+<script type="text/javascript">
 
+
+
+        function addtocart(product_id){
+            qty = $('#qty').val();
+
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+            $.ajax({
+                method: "POST",
+                url: "/addProductToCartajax",
+                data: {
+                    "product_id":product_id,
+                    "qty": qty,
+                    },
+                success: function (data) {
+                    var p = $("#"+product_id);
+                    var cart_count = $('.cart-count').text();
+                    if(p.text() != 'le produit deja au panier'){
+                        $('.cart-count').html(parseInt(cart_count) + 1);
+                        $('.cart-count').css('opacity','1');
+                    }
+                    p.queue(function() {
+                    p.html('le produit deja au panier');
+                    p.css("background-color", "#ff9930");
+                    });
+
+                }
+                })
+        }
+
+</script>
 @endsection

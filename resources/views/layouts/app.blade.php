@@ -114,9 +114,9 @@
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="{{ route('show.cart') }}"><i class="fas fa-shopping-cart"></i>
-                                            @if ($cart_count->count() > 0)
-                                            <span class='cart-count'>{{ $cart_count->count() }}</span>
-                                            @endif
+                                            <span @if ($cart_count->count() == 0) style='opacity:0' @endif class='cart-count'>{{ $cart_count->count() }}</span>
+
+
                                         </a>
                                         <a  href="#"><img height="40" width="40" class="rounded-circle img-thumbnail mr-2" src="https://ui-avatars.com/api/?name={{ auth()->user()->name  }}">{{ auth()->user()->name }}</a>
 										{{-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> --}}

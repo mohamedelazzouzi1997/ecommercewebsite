@@ -30,7 +30,8 @@ class productController extends Controller
         $product = Product::find($id);
         $product_category = Category::where('id',$product->id)->first();
 
-        $product_by_same_categorys = Product::where('category_id',$product_category->id)->get()->random(3)->values();
+        // $product_by_same_categorys = Product::where('category_id',$product_category->id)->get()->random(3)->values();
+        $product_by_same_categorys = Product::where('category_id',$product_category->id)->get();
 
         return view('product.single_product',compact('product','cart','product_category','product_by_same_categorys'));
     }

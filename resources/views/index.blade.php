@@ -102,13 +102,14 @@ HajarFleur
 							<a href="{{ route('show.product',$product->id) }}"><img height="300" src="{{ asset('img/'.$product->img) }}" alt="{{ $product->img }}"></a>
 						</div>
 						<h3>{{ $product->name }}</h3>
+                        <input class='product_id'  type="hidden" id="product_id" value="{{ $product->id }}">
 						<p class="product-price"><span>{{ $product->description }}</span> {{ $product->price }} DH</p>
                         @if (auth()->check())
                             @if ($cart->where('product_id', $product->id)->count())
                                 <a style='background-color: #ff9930' href="#" onclick="return false;" class="cart-btn"><i class="fas fa-shopping-cart"></i> le produit deja au panier</a>
 
                             @else
-                                <a href="{{ route('add.cart', $product->id) }}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
+                                <a id='{{ $product->id }}' onclick="addtocart({{ $product->id }})" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ajouter au panier</a>
 
                             @endif
 
@@ -123,37 +124,42 @@ HajarFleur
 			</div>
 		</div>
 	</div>
-	<!-- end product section -->
 
-    	<!-- logo carousel -->
-            {{-- <div class="logo-carousel-section">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="logo-carousel-inner">
-                                <div class="single-logo-item">
-                                    <img src="assets/img/company-logos/1.png" alt="">
-                                </div>
-                                 <div class="single-logo-item">
-                                    <img src="assets/img/company-logos/2.png" alt="">
-                                </div>
-                                <div class="single-logo-item">
-                                    <img src="assets/img/company-logos/3.png" alt="">
-                                </div>
-                                <div class="single-logo-item">
-                                    <img src="assets/img/company-logos/4.png" alt="">
-                                </div>
-                                <div class="single-logo-item">
-                                    <img src="assets/img/company-logos/5.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-	<!-- end logo carousel -->
 @endsection
 
 @section('scripts')
+<script type="text/javascript">
 
+
+
+        function addtocart(product_id){
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+            $.ajax({
+                method: "POST",
+                url: "/addProductToCartajax",
+                data: {
+                    "product_id":product_id,
+                    },
+                success: function (data) {
+                    var p = $("#"+product_id);
+                    var cart_count = $('.cart-count').text();
+                    if(p.text() != 'le produit deja au panier'){
+                        $('.cart-count').html(parseInt(cart_count) + 1);
+                        $('.cart-count').css('opacity','1');
+                    }
+                    p.queue(function() {
+                    p.html('le produit deja au panier');
+                    p.css("background-color", "#ff9930");
+                    });
+
+                }
+                })
+        }
+
+</script>
 @endsection
